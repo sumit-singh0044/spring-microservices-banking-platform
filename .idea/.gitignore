@@ -13,4 +13,5 @@
 
 target/
 
-src/main/java/com/user/userinfo/learntest/
+UserInfo/src/main/java/com/user/userinfo/learntest/
+data-service/src/main/java/com/user/dataservice/pattern/

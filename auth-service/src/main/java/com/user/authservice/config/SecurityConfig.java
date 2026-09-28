@@ -25,7 +25,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/login").permitAll()
                         .anyRequest().authenticated()
                 );
-
         return http.build();
     }
 

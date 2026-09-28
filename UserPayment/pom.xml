@@ -88,13 +88,12 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Uncomment if your entities use @Data / @Getter / @Builder
+        <!-- Lombok: Uncomment to use Lombok annotations -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-        -->
 
     </dependencies>
 

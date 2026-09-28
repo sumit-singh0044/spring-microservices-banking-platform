@@ -12,4 +12,6 @@ public interface DataRepository extends JpaRepository<DataTable, Long> {
 
     Optional<DataTable> findByPhonenumber(int phoneNumber);
 
+    Optional<DataTable> findById(Long id);
+
 }

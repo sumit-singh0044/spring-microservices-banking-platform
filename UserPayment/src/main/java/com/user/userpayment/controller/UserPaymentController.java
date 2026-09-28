@@ -28,7 +28,7 @@ public class UserPaymentController {
     }
 
     @PostMapping
-    public ResponseEntity<Void>  createAccount(@RequestBody AccountRequest request)
+    public ResponseEntity<AccountResponse>  createAccount(@RequestBody AccountRequest request)
     {
         String email = request.getEmail();
         long id  = request.getId();
@@ -38,7 +38,8 @@ public class UserPaymentController {
 
         Account account = userPaymentService.saveAccountDetails(request);
 //        return ResponseEntity.ok("Account created successfully");
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(new AccountResponse(account.getAccountNumber()));
+
     }
 
     @GetMapping

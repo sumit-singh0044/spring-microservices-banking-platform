@@ -1,5 +1,6 @@
 package com.user.userinfo.controller;
 
+import com.user.userinfo.dto.UserDTO;
 import com.user.userinfo.entity.Users;
 import com.user.userinfo.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -37,9 +38,10 @@ public class UserController {
         return ResponseEntity.ok(userService.getUsersAddress());
     }
 
+
     @PostMapping
-    public ResponseEntity<Users> saveUser(@RequestBody Users user) {
-        Users savedUser = userService.saveUser(user);
+    public ResponseEntity<UserDTO> saveUser(@RequestBody Users user) {
+        UserDTO savedUser = userService.saveUser(user);
         if (savedUser == null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }

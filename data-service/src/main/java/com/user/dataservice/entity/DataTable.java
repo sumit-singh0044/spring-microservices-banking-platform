@@ -19,10 +19,9 @@ public class DataTable {
     private String name;
 
     @Column(name = "phone_number")
-    private int phonenumber;
+    private Integer phonenumber;
     private String description;
     private String createdBy;
     private String updatedBy;
     private String location;
-
     }

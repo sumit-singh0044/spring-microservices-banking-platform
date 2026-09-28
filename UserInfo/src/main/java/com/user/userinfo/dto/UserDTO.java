@@ -1,13 +1,15 @@
 package com.user.userinfo.dto;
 
+
 import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter
 @Setter
-@ToString
-public class AccountResponse {
-
+public class UserDTO {
+    private String name;
+    private String email;
     private String accountNumber;
 }

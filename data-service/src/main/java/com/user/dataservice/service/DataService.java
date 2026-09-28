@@ -7,6 +7,7 @@ import com.user.dataservice.repository.DataRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,91 @@ public class DataService {
         );
         log.info("Saved data into the database");
 
+
+
         return dtosRes;
+    }
+
+    public DtosRes getDataById(Long id) {
+
+        log.info("Fetching data by ID {} from the database", id);
+        DataTable dataTable = dataRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.error("Data with ID {} not found", id);
+                    return new RuntimeException("Data with ID " + id + " not found");
+                });
+        DtosRes dtosRes = new DtosRes(
+                dataTable.getId(),
+                dataTable.getName(),
+                dataTable.getPhonenumber(),
+                dataTable.getDescription(),
+                dataTable.getCreatedBy()
+        );
+        log.info("Retrieved data by ID {} from the database", id);
+        return dtosRes;
+    }
+
+    public DtosRes getDataByQuerParam(String querParam) {
+        // Implementation for fetching data by query parameter
+        DataTable dataTable = dataRepository.findById(Long.parseLong(querParam))
+                .orElseThrow(() -> {
+                    log.error("Data with ID {} not found", querParam);
+                    return new RuntimeException("Data with ID " + querParam + " not found");
+                });
+        DtosRes dtosRes = new DtosRes(
+                dataTable.getId(),
+                dataTable.getName(),
+                dataTable.getPhonenumber(),
+                dataTable.getDescription(),
+                dataTable.getCreatedBy()
+        );
+        log.info("Retrieved data by query parameter {} from the database", querParam);
+        return dtosRes;
+    }
+
+    public DtosRes updateData(DataTable dataTable, Long id) {
+        log.info("Updating data in the database");
+        DataTable existingData = dataRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Data not found"));
+
+        existingData.setName(dataTable.getName());
+        existingData.setPhonenumber(dataTable.getPhonenumber());
+        existingData.setDescription(dataTable.getDescription());
+
+        DataTable updatedData = dataRepository.save(existingData);
+
+        return new DtosRes(
+                updatedData.getId(),
+                updatedData.getName(),
+                updatedData.getPhonenumber(),
+                updatedData.getDescription(),
+                updatedData.getCreatedBy()
+        );
+    }
+
+    public DtosRes patchData(DataTable dataTable, Long id) {
+        log.info("Patching data in the database");
+        DataTable existingData = dataRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Data not found"));
+
+        if (dataTable.getName() != null) {
+            existingData.setName(dataTable.getName());
+        }
+        if (dataTable.getPhonenumber() != null) {
+            existingData.setPhonenumber(dataTable.getPhonenumber());
+        }
+        if (dataTable.getDescription() != null) {
+            existingData.setDescription(dataTable.getDescription());
+        }
+
+        DataTable patchedData = dataRepository.save(existingData);
+
+        return new DtosRes(
+                patchedData.getId(),
+                patchedData.getName(),
+                patchedData.getPhonenumber(),
+                patchedData.getDescription(),
+                patchedData.getCreatedBy()
+        );
     }
 }

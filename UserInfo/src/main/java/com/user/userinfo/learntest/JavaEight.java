@@ -81,6 +81,9 @@ public class JavaEight {
     List<Integer> li = new ArrayList<>(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9));
     li.stream().filter(e ->e %2==0).forEach(System.out::print);
 
+    int sumT= li.stream().mapToInt(Integer::intValue).sum();
+    int sumT1= li.stream().reduce(0, Integer::sum);
+
 }
 
 }

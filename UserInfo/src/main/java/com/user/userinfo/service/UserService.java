@@ -2,16 +2,20 @@ package com.user.userinfo.service;
 
 import com.user.userinfo.client.PaymentClient;
 import com.user.userinfo.dto.AccountRequest;
+import com.user.userinfo.dto.AccountResponse;
 import com.user.userinfo.dto.UserCreatedEvent;
+import com.user.userinfo.dto.UserDTO;
 import com.user.userinfo.entity.Users;
 import com.user.userinfo.exception.PaymentServiceException;
 import com.user.userinfo.kafka.UserProducer;
 import com.user.userinfo.repository.AddressRepository;
 import com.user.userinfo.repository.UserRepository;
 import feign.FeignException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -44,7 +49,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Users saveUser(Users user) {
+    @Transactional
+    public UserDTO saveUser(Users user) {
         Optional<Users> optionalUser = userRepository.findByEmail(user.getEmail());
         if (optionalUser.isPresent()) {
             return null;
@@ -57,10 +63,18 @@ public class UserService {
         request.setId(savedUsers.getId());
         request.setEmail(savedUsers.getEmail());
 
+        AccountResponse accountResponse;
+
         try {
-            paymentClient.createAccount(request);
+            ResponseEntity<AccountResponse> response =
+                    paymentClient.createAccount(request);
+            accountResponse = response.getBody();
+
+            log.info("Account response: {}", accountResponse);
+            log.info("Account number: {}", accountResponse.getAccountNumber());
+
         } catch (FeignException ex) {
-            userRepository.delete(savedUsers); // compensating rollback
+            userRepository.delete(savedUsers);
             throw new PaymentServiceException("Failed to create bank account");
         }
 
@@ -68,7 +82,12 @@ public class UserService {
                 savedUsers.getId(), savedUsers.getName(), savedUsers.getEmail());
 //        userProducer.sendMessage(event);
 
-        return savedUsers;
+        UserDTO userDTO = new UserDTO().builder()
+                .name(savedUsers.getName())
+                .email(savedUsers.getEmail())
+                .accountNumber(accountResponse.getAccountNumber())
+                .build();
+        return userDTO;
     }
 
     @Cacheable(value = "users", key = "#id")
