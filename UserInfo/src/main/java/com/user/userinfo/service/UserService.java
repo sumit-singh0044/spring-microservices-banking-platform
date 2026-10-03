@@ -87,6 +87,9 @@ public class UserService {
                 .email(savedUsers.getEmail())
                 .accountNumber(accountResponse.getAccountNumber())
                 .build();
+
+        savedUsers.setAccountNumber(accountResponse.getAccountNumber());
+        userRepository.save(savedUsers);
         return userDTO;
     }
 
