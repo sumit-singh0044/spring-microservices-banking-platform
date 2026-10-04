@@ -1,9 +1,11 @@
 package com.user.paymentservice.controller;
 
-import com.user.paymentservice.dto.PaymentDTO;
+import com.user.paymentservice.dto.AccounResDTO;
+import com.user.paymentservice.dto.BankDTO;
+import com.user.paymentservice.dto.PaymentReqDTO;
+import com.user.paymentservice.dto.PaymentResDTO;
 import com.user.paymentservice.entity.PaymentTransfer;
 import com.user.paymentservice.service.PaymentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +19,10 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    @GetMapping("/{acc}")
-    public ResponseEntity<PaymentDTO> getPayments(@PathVariable String acc) {
-        PaymentDTO dto = paymentService.getAllPayments(acc);
-        return ResponseEntity.status(200).body(dto);
+    @PostMapping("/validate")
+    public ResponseEntity<AccounResDTO> creditAmount(@RequestBody BankDTO dto) {
+        AccounResDTO res = paymentService.getBankDetails(dto);
+        return ResponseEntity.status(200).body(res);
     }
 
 }

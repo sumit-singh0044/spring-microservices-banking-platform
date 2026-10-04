@@ -6,7 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class PaymentDTO {
+public class PaymentResDTO {
     private String destination;
     private Long amount;
     private String status;

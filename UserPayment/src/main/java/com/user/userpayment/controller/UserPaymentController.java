@@ -1,7 +1,9 @@
 package com.user.userpayment.controller;
 
 import com.user.userpayment.dto.AccountRequest;
+import com.user.userpayment.dto.AccountResDTO;
 import com.user.userpayment.dto.AccountResponse;
+import com.user.userpayment.dto.BankDTO;
 import com.user.userpayment.entity.Account;
 import com.user.userpayment.service.UserPaymentService;
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
@@ -49,15 +51,11 @@ public class UserPaymentController {
         return ResponseEntity.ok(userPaymentService.getAllAccount());
     }
 
-
-
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteAccount(@PathVariable Long userId) {
         userPaymentService.deleteAccount(userId);
         return ResponseEntity.noContent().build();
     }
-
-
 
     public ResponseEntity<List<Account>> getAllAccountFallback(
             RequestNotPermitted exception) {
@@ -67,4 +65,15 @@ public class UserPaymentController {
                 .build();
     }
 
+
+//    controller for openfeign client
+
+    @PostMapping("/bank")
+    public ResponseEntity<AccountResDTO> getBankDetailsClient(@RequestBody BankDTO bankDTO) {
+
+        AccountResDTO dto = userPaymentService.getAccountDetails(bankDTO);
+
+        return  ResponseEntity.status(200).body(dto);
+
+    }
 }

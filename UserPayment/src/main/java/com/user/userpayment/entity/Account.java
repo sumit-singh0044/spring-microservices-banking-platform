@@ -19,7 +19,7 @@ public class Account {
     private Long id;
     private String email;
     private Long userID;
-    private String AccountNumber;
+    private String accountNumber;
     private Long balance;
 
 //    public Long getId() {
