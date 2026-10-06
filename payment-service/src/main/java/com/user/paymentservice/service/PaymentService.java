@@ -6,6 +6,7 @@ import com.user.paymentservice.dto.BankDTO;
 import com.user.paymentservice.dto.PaymentReqDTO;
 import com.user.paymentservice.dto.PaymentResDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PaymentService {
@@ -20,5 +21,24 @@ public class PaymentService {
     public AccounResDTO getBankDetails(BankDTO dto) {
 
         return paymentClinet.getBankDetailsClient(dto).getBody();
+    }
+
+
+    public PaymentResDTO processClientPayment(PaymentReqDTO dto) {
+
+        PaymentResDTO response = paymentClinet
+                .amountTransferClient(dto)
+                .getBody();
+
+        if ("FAILURE".equals(response.getStatus())) {
+            return PaymentResDTO.builder()
+                    .destination(response.getDestination())
+                    .amount(response.getAmount())
+                    .status("Transfer failed")
+                    .build();
+        }
+
+        return response; 
+
     }
 }

@@ -1,9 +1,6 @@
 package com.user.userpayment.controller;
 
-import com.user.userpayment.dto.AccountRequest;
-import com.user.userpayment.dto.AccountResDTO;
-import com.user.userpayment.dto.AccountResponse;
-import com.user.userpayment.dto.BankDTO;
+import com.user.userpayment.dto.*;
 import com.user.userpayment.entity.Account;
 import com.user.userpayment.service.UserPaymentService;
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
@@ -75,5 +72,10 @@ public class UserPaymentController {
 
         return  ResponseEntity.status(200).body(dto);
 
+    }
+
+    @PostMapping("/credit")
+    public ResponseEntity<PaymentResDTO> amountTransferClient(@RequestBody PaymentReqDTO dto){
+        return ResponseEntity.status(200).body(userPaymentService.amountTransferClientservice(dto));
     }
 }

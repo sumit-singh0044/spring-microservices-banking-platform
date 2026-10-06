@@ -1,9 +1,7 @@
 package com.user.userpayment.service;
 
-import com.user.userpayment.dto.AccountResDTO;
-import com.user.userpayment.dto.BankDTO;
+import com.user.userpayment.dto.*;
 import com.user.userpayment.repository.UserPaymentRepository;
-import com.user.userpayment.dto.AccountRequest;
 import com.user.userpayment.entity.Account;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
@@ -60,6 +58,46 @@ public class UserPaymentService {
         return AccountResDTO.builder()
                 .bankAccount(account.getAccountNumber())
                 .balance(account.getBalance())
+                .build();
+    }
+
+    @Transactional
+    public PaymentResDTO amountTransferClientservice(PaymentReqDTO dto) {
+
+        Account account = userPaymentRepository
+                .getAccountByAccountNumber(dto.getSourceAccountNumber())
+                .orElseThrow(() -> new RuntimeException(
+                        "Account not found: " + dto.getSourceAccountNumber()
+                ));
+
+        Account account2 = userPaymentRepository
+                .getAccountByAccountNumber(dto.getDestinationBankAccount())
+                .orElseThrow(() -> new RuntimeException(
+                        "Account not found: " + dto.getDestinationBankAccount()
+                ));
+
+        // Insufficient balance
+        if (dto.getAmount() > account.getBalance()) {
+
+            return PaymentResDTO.builder()
+                    .destination(dto.getDestinationBankAccount())
+                    .amount(dto.getAmount())
+                    .status("FAILURE")
+                    .build();
+        }
+
+        // Deduct
+        account.setBalance(account.getBalance() - dto.getAmount());
+        userPaymentRepository.save(account);
+
+        // Credit
+        account2.setBalance(account2.getBalance() + dto.getAmount());
+        userPaymentRepository.save(account2);
+
+        return PaymentResDTO.builder()
+                .destination(dto.getDestinationBankAccount())
+                .amount(dto.getAmount())
+                .status("SUCCESS")
                 .build();
     }
 }

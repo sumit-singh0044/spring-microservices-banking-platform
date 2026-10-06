@@ -20,9 +20,15 @@ public class PaymentController {
     }
 
     @PostMapping("/validate")
-    public ResponseEntity<AccounResDTO> creditAmount(@RequestBody BankDTO dto) {
+    public ResponseEntity<AccounResDTO> validateBank(@RequestBody BankDTO dto) {
         AccounResDTO res = paymentService.getBankDetails(dto);
         return ResponseEntity.status(200).body(res);
     }
+
+    @PostMapping
+    public ResponseEntity<PaymentResDTO> processPayment(@RequestBody PaymentReqDTO dto) {
+        return ResponseEntity.status(200).body(paymentService.processClientPayment(dto));
+    }
+
 
 }

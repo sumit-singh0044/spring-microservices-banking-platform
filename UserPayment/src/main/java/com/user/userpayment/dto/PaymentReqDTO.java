@@ -1,12 +1,12 @@
-package com.user.paymentservice.dto;
+package com.user.userpayment.dto;
 
 import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
-@Builder
 @NoArgsConstructor
+@Builder
 public class PaymentReqDTO {
     private String sourceAccountNumber;
     private String destinationBankAccount;
