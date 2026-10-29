@@ -48,6 +48,7 @@ public class UserPaymentController {
         return ResponseEntity.ok(userPaymentService.getAllAccount());
     }
 
+
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteAccount(@PathVariable Long userId) {
         userPaymentService.deleteAccount(userId);
@@ -64,7 +65,6 @@ public class UserPaymentController {
 
 
 //    controller for openfeign client
-
     @PostMapping("/bank")
     public ResponseEntity<AccountResDTO> getBankDetailsClient(@RequestBody BankDTO bankDTO) {
 
