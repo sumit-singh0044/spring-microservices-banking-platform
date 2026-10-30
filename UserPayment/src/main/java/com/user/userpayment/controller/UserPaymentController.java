@@ -5,6 +5,7 @@ import com.user.userpayment.entity.Account;
 import com.user.userpayment.service.UserPaymentService;
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/accounts")
+@Slf4j
 public class UserPaymentController {
 
     private static final Logger log = LoggerFactory.getLogger(UserPaymentController.class);
@@ -68,8 +70,10 @@ public class UserPaymentController {
     @PostMapping("/bank")
     public ResponseEntity<AccountResDTO> getBankDetailsClient(@RequestBody BankDTO bankDTO) {
 
-        AccountResDTO dto = userPaymentService.getAccountDetails(bankDTO);
+        log.info("Method running");
+//        throw new RuntimeException("Simulating failures");
 
+        AccountResDTO dto = userPaymentService.getAccountDetails(bankDTO);
         return  ResponseEntity.status(200).body(dto);
 
     }

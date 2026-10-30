@@ -20,7 +20,10 @@
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2025.1.2</spring-cloud.version>
+        <resilience4j.version>2.4.0</resilience4j.version>
+
     </properties>
+
 
     <dependencyManagement>
         <dependencies>
@@ -75,6 +78,14 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+<!--        Resislence4j-->
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-spring-boot4</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa-test</artifactId>
