@@ -22,7 +22,6 @@ public class KafkaConfig {
 
     @Bean
     public ProducerFactory<String, UserCreatedEvent> producerFactory() {
-
         Map<String, Object> config = new HashMap<>();
 
         config.put(

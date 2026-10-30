@@ -1,11 +1,11 @@
 package com.user.userpayment.controller;
 
-import com.user.userpayment.dto.AccountRequest;
-import com.user.userpayment.dto.AccountResponse;
+import com.user.userpayment.dto.*;
 import com.user.userpayment.entity.Account;
 import com.user.userpayment.service.UserPaymentService;
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/accounts")
+@Slf4j
 public class UserPaymentController {
 
     private static final Logger log = LoggerFactory.getLogger(UserPaymentController.class);
@@ -49,13 +50,12 @@ public class UserPaymentController {
         return ResponseEntity.ok(userPaymentService.getAllAccount());
     }
 
+
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteAccount(@PathVariable Long userId) {
         userPaymentService.deleteAccount(userId);
         return ResponseEntity.noContent().build();
     }
-
-
 
     public ResponseEntity<List<Account>> getAllAccountFallback(
             RequestNotPermitted exception) {
@@ -65,4 +65,21 @@ public class UserPaymentController {
                 .build();
     }
 
+
+//    controller for openfeign client
+    @PostMapping("/bank")
+    public ResponseEntity<AccountResDTO> getBankDetailsClient(@RequestBody BankDTO bankDTO) {
+
+        log.info("Method running");
+//        throw new RuntimeException("Simulating failures");
+
+        AccountResDTO dto = userPaymentService.getAccountDetails(bankDTO);
+        return  ResponseEntity.status(200).body(dto);
+
+    }
+
+    @PostMapping("/credit")
+    public ResponseEntity<PaymentResDTO> amountTransferClient(@RequestBody PaymentReqDTO dto){
+        return ResponseEntity.status(200).body(userPaymentService.amountTransferClientservice(dto));
+    }
 }
