@@ -10,6 +10,7 @@
         <module name="payment-service" />
         <module name="api-gateway" />
         <module name="data-service" />
+        <module name="bank-statement-service" />
         <module name="UserInfo" />
         <module name="UserPayment" />
         <module name="eureka-server" />
@@ -26,6 +27,7 @@
       <module name="UserPayment" options="-parameters" />
       <module name="api-gateway" options="-parameters" />
       <module name="auth-service" options="-parameters" />
+      <module name="bank-statement-service" options="-parameters" />
       <module name="bankstatement-service" options="-parameters" />
       <module name="data-service" options="-parameters" />
       <module name="eureka-server" options="-parameters" />

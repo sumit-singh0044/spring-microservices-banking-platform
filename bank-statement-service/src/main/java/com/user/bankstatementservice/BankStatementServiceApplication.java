@@ -1,13 +1,13 @@
-package com.user.datatestservice;
+package com.user.bankstatementservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DatatestServiceApplication {
+public class BankStatementServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DatatestServiceApplication.class, args);
+        SpringApplication.run(BankStatementServiceApplication.class, args);
     }
 
 }
